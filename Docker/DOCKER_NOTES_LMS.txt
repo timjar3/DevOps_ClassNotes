@@ -1,8 +1,24 @@
 
 Installation of Docker:
 
+####### - - - - Makes sure you are the root user - - - - #######
+
+Add root user to /etc/sudoers
+
+# sudo su -
+# nano /etc/sudoers {Can be nano or vi}
+
+Under "root user" line
+username ADD=PASSWD: ALL 
+
+
+CenOS/RHEL
 # yum install docker -y
 # systemctl start docker
+
+Ubutu/Debian
+# apt-get install docker.io
+# services docker start
 
 ************************************
 Image Commands
@@ -84,6 +100,7 @@ If no tagname then by default it will be latest
 ************************************************************
 # docker run --name n1 nginx // image nginx will be pulled and container with name n1 will be running
 
+
 start the container in detach mode where in container will be running in background.
 
 
@@ -93,36 +110,56 @@ start the container in detach mode where in container will be running in backgro
 
 
 *********************************
-
 Delete all container
+****************************
 
-docker rm -f $(docker ps -aq)
+Force delete, all docker processing and quit)
+# docker rm -f $(docker ps -aq) 
+# docker rm -f container1 container2 
 
-docker system prune --all
+Delete all unused(Prune)
+# docker system prune --all
+
+=====Delete all images=====
+
+# docker rmi imageid/imagename imageid2 
+
 ***************************************************
 Command line containers
-
-Creating container in interactive mode
+***************************************
+Creating container in interactive mode or attached mode
 
 # docker run --name u1 -it ubuntu
 
 We will be in container now   
 #ls
 
-Out of container
-# ctlpctlq
+Out of container (Pause and quit)
+# ctl+p & ctl+q
 
 # docker attach u1
 Again inside the container
 
-Now use exit to come out
+to stop
+# docker stop containerID/name
+
+to start
+# docker start containerID/name
+
+Now use exit to come out, this stops the container process.
+exit
+
+- - - - VERIFY & CHECK - - - -
+
+# docker ps -a
+# docker inspect containerid/name
+# docker stats
+# docker images 
 
 Both ways we can come out of container in exit case the container will go to exited state.
 
 *************************************
-
-
-Creating container in interactive mode
+Creating container in interactive mode _ _ _( -it )_ _  _
 
 # docker run --name c1 -it centos
 
@@ -141,7 +178,7 @@ Start the conatiner again
 
 # docker attach c1
 
-# Ctldp +Ctlq
+# Ctl p + Ctl q
 
 # docker stop c1
 
@@ -160,12 +197,17 @@ PORT FORWARDING/PORT MAPPING
 
 Go to browser
 
+this will be the host port 8888
 Give public ip:8888
 
 *********************************************
 Automatic port mapping
 
 # docker run --name j1 -d -P jenkins
+
+Manual Port Mapping
+
+# docker run --name j1 -d -p 4646:80 nginx
 
 # docker container ls
 
@@ -176,7 +218,38 @@ OR
 On browser
 
 hostip:new port
+**********************************************
+Docker repository creation 
+on hub.docker.com
+create a user id for free, gives public repo and a restricted single private repo
 
+DOCKER CLIENT ==> DAEMON ==>  REGISTRY(docker.io)
+(LOCAL DOCKER)    (PROCESS)   (HUB.DOCKER.COM)
+Creat images       push       central repo
+
+ - --  - official naming convention  - - - - 
+registry/username/reponame:tag
+
+here registry can be from docker.io or Nexus or ECR or Docker private repo
+- - - -  - - - - - - -- - - - - - 
+when pulling from private repo
+
+# docker pull docker.io/username/imagename/tag
+
+when pulling from private repo
+
+# docker pull username/imagename/tag
+- - - -- - - - - -  - -- - - - - - - -
+
+to push the local image to the repo or hub
+first tag the image and the push 
+# docker tag timjar3/myimage:10 timjar3/mypublicrepo:1
+             user   imagename tag  user  newimage newtag
+	    
+# docker push timjar3/mypublicrepo:1
+ >if denied accesc
+# docker login
+ credentials
 
 ******************************************************
 Docker Volumes
