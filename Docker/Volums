@@ -1,6 +1,8 @@
 
 TO check if any volume created
 
+Default directory: var/lib/docker/volumes/myvol1/_data
+
 # docker volume ls
 
 ---------You cannot create volumns after creation of the container------
