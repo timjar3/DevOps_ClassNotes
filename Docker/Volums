@@ -1,0 +1,65 @@
+
+TO check if any volume created
+
+# docker volume ls
+
+---------You cannot create volumns after creation of the container------
+---------IT HAS TO BE CREATED AT RUNTIME---------------
+
+To create volume
+
+# docker volume create myvol1
+
+# docker volume create myvol2 --1gb (not correct)
+
+# docker volume inspect myvol1 ( will show the mountpoint, storage path)
+
+*****************************************************
+Container + Volume mapping (-v command)
+
+1) NAMED VOLUME 
+
+****conditions = here you should know the volumn name and the container source directory****
+
+  # docker run -it --name containername -v volumename:containerDir imagename
+Eg: docker run -it --name conti1 -v myvol1:/tmp centos   ( every OS container will have /tmp dir)
+Eg: docker run -it --name conti1 -v myvol1:/tmp -v myvol1:/tmp centos   ( in case of two directories to map for same vol)
+
+now create few file in the tmp dir once contaneraization is completed 
+# cd tmp/     touch file file2
+
+# docker volumn inspect myvol1     (to check the path on local host volumn created)
+
+/var/lib/docker/volumes/myvol1/_data
+
+# cd /var/lib/docker/volumes/myvol1/_data  (verify if the files created in reflected from contaniner dir)
+
+*******(note: if you create new files in the host machine under volumn path that also will be reflected in container dir,
+just like the windows mounting drives or folders)*******
+
+------ one more way of creating mapping or mountpoints across host and the containers --------
+  
+2) BIND MOUNT
+
+Combination of GIT, PORT MAPPING and VOLUMES 
+
+** pre-defined git repo named ecomm is saved under root/ecomm in the host machine and is being "copied" to the container 
+directory for an apache server container. Please note the destination director is very important and changes to every server
+that is being deployed to. for more info you can find under hub.docker.com/_/httpd similarly for other servers like tomcat and
+nginx scroll down till bottom to check "THE ROOT DIRECTORY" ***
+
+Eg:
+
+#docker run -d --name myweb1 -v /root/ecomm/:/usr/local/apache2/htdocs/ -p 8686:80 https
+
+
+
+
+
+  
+
+
+
+
+
+
