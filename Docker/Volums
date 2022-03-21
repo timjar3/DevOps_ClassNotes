@@ -50,7 +50,7 @@ nginx scroll down till bottom to check "THE ROOT DIRECTORY" ***
 
 Eg:
 
-#docker run -d --name myweb1 -v /root/ecomm/:/usr/local/apache2/htdocs/ -p 8686:80 https
+#docker run -d --name myweb1 -p 8383:80 -v /root/web/ecomm/:/usr/local/apache2/htdocs/ httpd
 
 
 
