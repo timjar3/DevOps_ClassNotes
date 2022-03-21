@@ -178,7 +178,9 @@ Start the conatiner again
 
 # docker attach c1 (only for OS containers like Ubuntu an Centos)
 
-# docker exec -it containername/ID /bin/bash (to attach into for servers+OS official images, like nginx, tomcat and httpd)
+# docker exec -it containername/ID /bin/bash  (to attach into for servers+OS official images, like nginx, tomcat and httpd)
+
+# docker exec -it containername/ID --bash
 
 # Ctl p + Ctl q
 
