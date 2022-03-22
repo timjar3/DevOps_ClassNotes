@@ -180,7 +180,7 @@ Start the conatiner again
 
 # docker exec -it containername/ID /bin/bash  (to attach into for servers+OS official images, like nginx, tomcat and httpd)
 
-# docker exec -it containername/ID --bash
+# docker exec -it containername/ID bash
 
 # Ctl p + Ctl q
 
@@ -457,134 +457,6 @@ http://18.221.206.57:32768/addressbook/
 ******************************************************************************
 
 **************************************************
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
