@@ -18,7 +18,8 @@ CenOS/RHEL
 
 Ubutu/Debian
 # apt-get install docker.io
-# services docker start
+# service docker start
+# systemctl start docker
 
 ************************************
 Image Commands
