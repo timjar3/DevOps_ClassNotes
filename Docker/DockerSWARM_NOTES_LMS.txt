@@ -331,6 +331,7 @@ Running docker compose on a swarm service
 # ls
 # nano docker-compose.yml
 # docker stack deploy --compose-file docker-compose.yml stackdemo
+# docker service scale stackdemo=10 (if you want to increase more replicas for high availability)
 
 
 
