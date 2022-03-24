@@ -64,7 +64,7 @@ Go to the manager machine and give below command
 
 # systemctl start docker
 
-# docker swarm init --advertise-addr 172.31.17.248(privateip of manager)
+# docker swarm init --advertise-addr 172.31.17.248(privateip of manager) (Can be done from worker node as long as the intended master node is with in same pvt network)
 
 Curent node will be now be swarm Manager and it will generate a token id that can be executed on worker nodes so that they will join the swarm as workers.
 
@@ -103,6 +103,10 @@ paste the token command here from notepad  // as shown below:
 
 // the worker2 will now join the swarm as worker
 It will give message as: This node joined a swarm as a worker.
+
+# docker swarm join-token worker (to view the existing token or generate again for worker)
+
+# docker swarm join-token manager (to add another manager or leader node, view token and add)
 
 MANAGER NODE:
 
@@ -200,6 +204,9 @@ A. Create a httpd service with 6 replicas and delete one replica running on the 
 3. Drain worker1 from the swarm 
 	
 	# docker node ls
+	
+	copy th host name as worker node name to drain
+	
 	# docker node update --availability drain Worker1
 
 4. check if all 6 replicas are running on manager and worker2
@@ -315,7 +322,15 @@ OR
 
 In network you will see netwrok to be overlay1
 
+*************************************************************
+Deploying docker-compose file in a cluster.
+Running docker compose on a swarm service
 
+# mkdir swarm
+# cd swarm/
+# ls
+# nano docker-compose.yml
+# docker stack deploy --compose-file docker-compose.yml stackdemo
 
 
 
