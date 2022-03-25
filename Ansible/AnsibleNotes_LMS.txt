@@ -57,10 +57,13 @@ Install Ansible :
 Step 1:
 *************
 
+ANSIBLE is not found in yum package libraries need to install epel package first
+
 # yum list | grep ansible  // you will not find ansible package as default in yum
 
 So install epel replositories and it will ass ansible to yum repository
 
+EPEL = extra packages for enterprise linux
 
 	# yum install epel-release
 
@@ -157,11 +160,20 @@ will give the uptime of hosts in webservers
 To chekc all modules in ansible
 
 # ansible-doc -l
+ 
+ ansible-doc ping (gives ping specific doc)
+
+**to check all the modules***
+cd /usr/lib/python2.7/site-packages/ansible/modules/system
 
 use up arrow key and down arrow key to scroll up and down.
 press q to exit
 ********************************
 
+TO CREATE PLAYBOOKS
+
+NAVIGATE TO	# cd /etc/ansible/
+     Save in this director for uniformity
 Playbook2 -- For TomCat
 
 # sudo vim playbook2.yml
@@ -181,14 +193,36 @@ i
     get_url:
      url=https://tomcat.apache.org/tomcat-7.0-doc/appdev/sample/sample.war
      dest=/usr/share/tomcat/webapps
-    notify: restart tomcat
+    notify: restart tomcat                      
   handlers:
-   - name: restart tomcat
+   - name: restart tomcat                       (Idempotency= to stop restarting installations if already existing)
      service: name=tomcat state=restarted
+     
+ ******************************************    
+   this is the latest version of syntax 
+   
+- hosts: webservers
+  become: true
+  become_user: root
+  tasks:
+  - name: Install httpd
+    yum:
+      name: httpd
+      state: latest
+  - name: Start httpd
+    service:
+      name: httpd
+      state: started
 
+******************************************************
 Syntax check:
 
 # ansible-playbook playbook1.yml --syntax-check
+
+# ansible-playbook playbook1.yml --list-hosts  (lists availalbe and running hosts)
+
+# ansible-playbook --check playbook1.yml (to dry run the file)
+
 
 # ansible-playbook playbook1.yml
 
@@ -210,7 +244,7 @@ i
   - name: start httpd
     service: name=httpd state=started
   - name: deploy html file
-    copy: src=/etc/ansible/index.html dest=/var/www/html
+    copy: src=/etc/ansible/index.html dest=/var/www/html (src is from the local machine and dest is target machines)
     notify: restart httpd
   handlers:
   - name: restart httpd
@@ -224,7 +258,35 @@ Check syntax
 Now run the playbook
 
 	# ansible-playbook playbook.yml
+**********************************************
+using variables
 
+- hosts: webservers
+  become: true
+  become_user: root
+  vars:
+    src_path: /etc/ansible                        (creating variables)
+    dest_path: /var/www/html
+  tasks:
+  - name: install httpd
+    yum: name=httpd state=present
+  - name: start httpd
+    service: name=httpd state=started
+  - name: deploy html file
+    copy: src={{src_path}}/index.html dest={{dest_path}} (src is from the local machine and dest is target machines)
+    notify: restart httpd
+  handlers:
+  - name: restart httpd
+    service: name=httpd state=restarted
+
+:wq!
+
+Check syntax
+
+	# ansible-playbook playbook.yml --syntax-check
+Now run the playbook
+
+	# ansible-playbook playbook.yml
 
 *************************************
 
