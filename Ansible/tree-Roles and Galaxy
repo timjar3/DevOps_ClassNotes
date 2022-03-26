@@ -1,0 +1,137 @@
+# mkdir anible
+# mkdir roles
+# cd roles/
+# sudo mkdir tomcat
+# cd tomcat/
+# sudo mkdir files handlers meta tasks vars   (all this dir all pre-defined and fixed)
+# cd tasks/
+# cat /etc/ansible/playbook1.yml  (copy the yml code from existing to the new roles)
+
+***segregate all the respective tasks, handlers, metadata and copy to tasks folder
+   create main.yml file and copy respective tasks and metadata and each directory***
+   
+# nano main.yml   (in task directory)
+
+tasks:
+  - name: install tomcat
+    yum: name=tomcat state=present
+  - name: start tomcat
+    service: name=tomcat state=started
+  - name: deploy war file
+    get_url:
+     url=https://tomcat.apache.org/tomcat-5.5-doc/appdev/sample/sample.war
+     dest=/usr/share/tomcat/webapps
+    notify: restart tomcat
+
+# nano main.yml (in handler dir)
+
+- name: restart tomcat
+     service: name=tomcat state=restarted
+     
+# sudo yum install tree -y
+
+# cd roles/
+
+# tree (from roles dir)
+
+# sudo nano tomsite.yml
+  
+- hosts: webservers     (hosts group name in /etc/ansible/host)
+  become: true
+  become_user: root
+  roles:
+  - tomcat           (takes tree  dir into variable and executes)
+  
+# ansible-playbook site.yml
+
+***********************************************************
+
+Similarly create httpd, apache webserver: 
+
+# mkdir apache
+cd apache/
+sudo mkdir files handler tasks meta vars
+cd tasks/
+
+# nano main.yml   ( in tasks dir)
+
+- name: installing apache webserver
+  yum: name=httpd state=present
+- name: install service to httpd
+  service: name=httpd state=started
+- name: Deploy html source
+  copy: src=index.html dest={{dest_path}}         (note the sorce path vairable is by default the "files" directory, while assiging var )
+  notify: restart httpd
+
+# nano main.yml  (in handler dir)
+
+- name: restart httpd
+  service: name=httpd state=restarted
+  
+# nano var.yml (in var dir)
+
+dest_path: /var/www/html                       (note: there is no need to write the source path, as by roles module it will use by default, files dir)
+
+# nano index.html ( in files dir)
+
+<h1> this is amazing website sample using ansible </h1>            (html static website source)
+
+# nano tomsite.yml  (in ansible dir) ##### Note: (we will edit the same yml file in the roles directory which we created during tomcat app deplaoyment)
+
+- hosts: webservers
+  become: true
+  become_user: root
+  role:
+  - tomcat
+  - apache        (this is the only part you would need to change or we can create one more file to run its user defined)
+  
+# ansible-playbook --check httpdsite.yml (inside ansible dir)  
+
+# ansible-playbook httpdsite.yml      (just run the agent's public ip on the browser
+ 
+ Note#########   httpD apache server: just run your pub ip on the browser
+                 Tomcat server: Pub-IP + port number (default is 8080)
+                 Nginx server: Pub-IP + port Number (default is 80 )
+
+this is the below tree and path 
+.
+├── ansible.cfg
+├── hosts
+├── httpsite.yml
+├── playbook1.yml
+├── roles
+│   ├── apache
+│   │   ├── files
+│   │   │   └── index.html
+│   │   ├── handlers
+│   │   │   └── main.yml
+│   │   ├── meta
+│   │   ├── tasks
+│   │   │   └── main.yml
+│   │   └── vars
+│   │       └── main.yml
+│   └── tomcat
+│       ├── files
+│       ├── handlers
+│       │   └── main.yml
+│       ├── meta
+│       ├── tasks
+│       │   └── main.yml
+│       └── vars
+└── tomsite.yml
+
+********************************************************************
+
+
+
+
+
+  
+
+
+
+
+
+     
+
+
