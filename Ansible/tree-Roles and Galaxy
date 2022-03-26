@@ -1,5 +1,22 @@
-# mkdir anible
-# mkdir roles
+
+          69696969                         69696969
+       6969    696969                   696969    6969
+     969    69  6969696               6969  6969     696
+    969        696969696             696969696969     696
+   969        69696969696           6969696969696      696
+   696      9696969696969           969696969696       969
+    696     696969696969             969696969        969
+     696     696  96969      _=_      9696969  69    696
+       9696    969696      q(-_-)p      696969    6969
+          96969696         '_) (_`         69696969
+             96            /__/  \            69
+             69          _(<_   / )_          96
+            6969        (__\_\_|_/__)        9696
+            
+            
+# cd /etc/ansible/
+ls
+if no roles dir...mkdir roles
 # cd roles/
 # sudo mkdir tomcat
 # cd tomcat/
@@ -8,7 +25,7 @@
 # cat /etc/ansible/playbook1.yml  (copy the yml code from existing to the new roles)
 
 ***segregate all the respective tasks, handlers, metadata and copy to tasks folder
-   create main.yml file and copy respective tasks and metadata and each directory***
+   create main.yml file and copy respective tasks and metadata lines to each respective directories ***
    
 # nano main.yml   (in task directory)
 
@@ -93,7 +110,7 @@ dest_path: /var/www/html                       (note: there is no need to write 
                  Tomcat server: Pub-IP + port number (default is 8080)
                  Nginx server: Pub-IP + port Number (default is 80 )
 
-this is the below tree and path 
+this is the below tree and path, NOte:**** all the 5 directory shoud be named exactly in plural format except for meta all ends with "s" ****
 .
 ├── ansible.cfg
 ├── hosts
@@ -121,6 +138,114 @@ this is the below tree and path
 └── tomsite.yml
 
 ********************************************************************
+using INCLUDE Feature in yml file to further segregate tasks 
+
+go to tasks directory:
+
+# cd tasks
+
+# sudo nano install.yml 
+
+name: installing apache webserver
+  yum: name=httpd state=present
+  
+# sudo nano service.yml
+
+- name: install service to httpd
+  service: name=httpd state=started
+
+# sudo nano deploy.yml
+
+- name: Deploy html source
+  copy: src=index.html dest={{dest_path}}
+  notify: restart httpd
+
+# sudo nano main.yml
+   include: install.yml
+   include: service.yml
+   include: deploy.yml
+   
+# ansible-playbook tomsite.yml
+
+#### Should run similar to the previos scenario, we can use this to run various yml files within an yml file,( calling one playbook with another playbook ) *****
+
+
+****************   Galaxy  **********************************
+
+
+using galaxy hub to get yml files for any task you would like to execute:
+__________  www.galaxy.ansible.com _____________
+
+To configure jenkins on your agent servers.
+
+1. To use jenkins using Ansible roles feature to execute a file and run the applicatio on mutilple servers.
+
+After finding a suitable code available copy the link from website. ( check the readme file and undestand the compatibilities, roles variable to edit )
+
+
+Eg: ansible-galaxy install lean_delivery.jenkins
+
+
+make sure you are inside the roles directory:
+
+# sudo ansible-galaxy install --roles-path /etc/ansible/roles/ lean_delivery.jenkins
+
+after succesfull installation:
+
+# ls (there should be new yml file lean_delivery.jenkins file)
+
+# nano tomsite.yml ( use the pre existing playbook file to to edit or add more applications as necessary )
+
+- hosts: webservers
+  become: true
+  become_user: root
+  vars:
+    jenkins2_config_http_port: 9090       (NEW EDIT) This command was found on readme section of the galaxy on that particular file 
+  roles:
+  - tomcat
+  - apache
+  - lean_delivery.jenkins                  (NEW EDIT) this can 
+  
+
+this installs jenkins on your agent servers all at once on the webservers ip's
+
+***********************************************************************************************
+
+==== how to deploy docker container on many different nodes/servers ============
+
+                __   __
+               __ \ / __
+              /   \ | /  \
+                  \|/
+             _,.---v---._
+   /\__/\   /            \
+   \_  _/  /              \
+     \ \__|           @ __|
+  tim \                 \_
+ jar3  \     ,__/        /
+      ~~~`~~~~~~~~~~~~~~/~~~~
+      
+      
+  
+      
+ 
+      
+ 
+     
+     
+
+
+
+
+
+
+
+
+
+
+
+ 
+ 
 
 
 
