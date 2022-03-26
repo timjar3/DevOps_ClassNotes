@@ -288,6 +288,8 @@ Now run the playbook
 
 	# ansible-playbook playbook.yml
 
+= === = == =  Before going to docker deployment check roles and galaxy in ansible in the repo = = = = = = == = = = = ==  
+
 *************************************
 
 docker deplyment
