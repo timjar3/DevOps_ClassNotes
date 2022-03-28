@@ -1,0 +1,23 @@
+Creat 3 instances 
+add all the necessary security group features
+
+As sudo user # sudo su -
+@ Worker node 1
+
+# hostnamectl set-hostname K8_WorkNode1
+
+@ Worker node 2
+
+# hostnamectl set-hostname K8_WorkNode2
+
+@ Master
+
+# hostnamectl set-hostname K8_master
+
+# nano /etc/hosts
+
+add the master-node and worker node private IP ( as they are in the same network and security group)
+
+K8_master
+K8_WorkNode1
+K8_WorkNode2
