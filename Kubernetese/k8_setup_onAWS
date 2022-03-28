@@ -14,10 +14,40 @@ As sudo user # sudo su -
 
 # hostnamectl set-hostname K8_master
 
-# nano /etc/hosts
+# nano /etc/hosts (add all their respective host IPs on all the machines, so they can communicate
+                   to each other)
 
 add the master-node and worker node private IP ( as they are in the same network and security group)
 
-K8_master
-K8_WorkNode1
-K8_WorkNode2
+172.31.94.208 K8_master          (****on all the Machines****)
+172.31.86.234 K8_WorkNode1
+172.31.90.125 K8_WorkNode2
+
+Use setenforce command to disable the secuirty in CentOS, RHEL based Linux Distros:
+     ### On all the machines ####
+     
+ # setenforce 0    
+ 
+ And reboot all the machine 
+     
+ # reboot
+ 
+ 
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+
+
