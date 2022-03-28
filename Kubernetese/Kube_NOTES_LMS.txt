@@ -1,6 +1,41 @@
-Kubernetes Notes:
+Kubernetes Notes: Using Google Cloud K8 Engine:
 
 # kubectl get nodes
+
+Eg: 
+NAME                                          STATUS   ROLES    AGE     VERSION
+gke-gcpcluster-1-default-pool-c5882977-7029   Ready    <none>   2m23s   v1.21.9-gke.1002
+gke-gcpcluster-1-default-pool-c5882977-hj72   Ready    <none>   2m23s   v1.21.9-gke.1002
+gke-gcpcluster-1-default-pool-c5882977-pw4h   Ready    <none>   2m23s   v1.21.9-gke.1002
+
+****Here the "roles" of a master node is not there.
+
+
+# kubectl get nodes -o wide ( givs you more details on the nodes, like the Pub and Pvt IP, OS IMmage)
+
+# kubectl explain pod | less ( to understand diff kind of objects to be explained from K8 document )
+
+In K8 we always use Manifest files to create Pods using yml declarative approach.
+
+# kubectl run pod1 --image nginx ( do not use this production environmnet)
+
+
+
+To check how and to analyse the creation pod:
+
+# kubectl describe pod pod1 | less         (just like inspect command from docker)
+
+# kubectl get pods
+
+# kubectl delete pod pod1           (to delete selected pods
+
+# kubectl delete pod pod1 --all     (to delete all, not good to use)
+
+# kubectl create -f pod1-definition.yml  (to execute or run the manifest or object defintion files)
+
+# kubectl exec -it mypod1 -- bash    ( to attach into the selected container and enter commands with in the container) 
+
+
 
 Scenario1: Creation of Pod definition file
 
@@ -21,7 +56,6 @@ spec:
  containers:
   - name: mynginx
     image: nginx
-
 
 
 	# kubectl get pods   
