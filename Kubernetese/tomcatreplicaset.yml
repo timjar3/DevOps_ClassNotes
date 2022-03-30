@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: ReplicaSet
 metadata:
  name: tomyreplica
- labels: ver01
+ labels:
    app: parktickets
    tier: frontend
 spec:
