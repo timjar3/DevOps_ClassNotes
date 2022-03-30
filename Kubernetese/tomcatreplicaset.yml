@@ -2,8 +2,8 @@ apiVersion: apps/v1
 kind: ReplicaSet
 metadata:
  name: tomyreplica
- labels:
-   app: parktickets
+ labels: ver01
+   author: parktickets
    tier: frontend
 spec:
  replicas: 10
@@ -17,7 +17,7 @@ spec:
   spec:
     containers:
     - name: conti1
-     image: tomcat:9
-     ports:
-      - containerPort: 8080
-        hostport: 9191
+      image: tomcat
+      ports:
+       - containerPort: 8080
+         hostPort: 9191
