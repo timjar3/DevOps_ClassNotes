@@ -3,7 +3,7 @@ Kubernetes Notes: Using Google Cloud K8 Engine:
 # kubectl get nodes
 
 Eg: 
-NAME                                          STATUS   ROLES    AGE     VERSION
+NAME                                          ROLES    AGE     VERSION
 gke-gcpcluster-1-default-pool-c5882977-7029   Ready    <none>   2m23s   v1.21.9-gke.1002
 gke-gcpcluster-1-default-pool-c5882977-hj72   Ready    <none>   2m23s   v1.21.9-gke.1002
 gke-gcpcluster-1-default-pool-c5882977-pw4h   Ready    <none>   2m23s   v1.21.9-gke.1002
@@ -25,11 +25,17 @@ To check how and to analyse the creation pod:
 
 # kubectl describe pod pod1 | less         (just like inspect command from docker)
 
-# kubectl get pods
+# kubectl get pods (specific to pods)
 
-# kubectl delete pod pod1           (to delete selected pods
+# kubectl get node (specific to node)
 
-# kubectl delete pod pod1 --all     (to delete all, not good to use)
+# kubectl get all   (best to use)
+
+# kubectl delete pod pod1         (to delete selected pods
+
+# kubectl delete -f pod-definition1.yml   (to delete all pods deployed, delete the yaml file associated pod )
+
+# kubectl delete all --all    (to delete all, not good to use)
 
 # kubectl create -f pod1-definition.yml  (to execute or run the manifest or object defintion files)
 
@@ -210,6 +216,38 @@ spec:
       ports:
        - containerPort: 80
          hostPort: 8888
+	 
+	 
+	 
+	 Or 
+	 
+	 
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: rolli
+spec:
+  replicas: 5
+  minReadySeconds: 10 # wait for 45 sec before going to deploy next pod
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1  
+      maxSurge: 1        # max number of pods to run for the deployment
+  selector:
+    matchLabels:
+      type: kubeserve
+  template:
+    metadata:
+      name: kube
+      labels:
+        type: kubeserve
+    spec:
+      containers:
+       - name: app
+         image: nginx
+         ports:
+          - containerPort: 80
 
 
 # kubectl get all  
@@ -230,7 +268,18 @@ Lets do rolling update now:
  # kubectl get all
 	#  kubectl --record deployment.apps/nginx-deployment set image deployment.v1.apps/nginx-deployment mynginx=nginx:1.9.1
 
-
+        # kubectl rollout history deployment deploymentName       (only depoyment name is added as set)
+	
+	# kubectl rollout status deployment deploymentName      (shows live deployment status)
+	
+	From K8 history:
+	 REVISION  CHANGE-CAUSE
+           1         <none>
+           2         kubectl set image deployment rolli app=timjar3/pubrepo1:39 --record=true
+           3         kubectl set image deployment rolli app=timjar3/pubrepo1:40 --record=true
+	
+	# kubectl rollout undo deployment deploymentName kubeserve --to-revision=1  (here deployment name and the             revision number is changed)
+	
 	# kubectl get pods
 
 will give all pods, here you will see a duplicate rpelica is created for which evrsion is being updated and after which it will delete the earlier version replica. so users will not face any downtime
@@ -247,7 +296,63 @@ Clean Up
 
 Creation of SERVICE OBJECTS
 
+ClusterIP:
+########
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-service
+spec:                   # if you dont add type, default selects cluster IP
+  selector:
+    type: kubeserve     # this is the pod name you are providing service for
+  ports:
+    - protocol: TCP     # if you dont give TCP, auto selects TCP
+      port: 80          # (pod port) (common practise to have same ports)
+      targetPort: 80    # (existing container port, tomcat, nginx)
+ 
+# kubcectl create -f clusterservice.yml
+ 
+ 
+# kubectl get all                       ( there will be new service ip with port 80)
+
+# kubectl get service	
+	
+# kubectl describe service my-service    (Endpoints with container IPs associated to the cluster, service                                                      IP, container will have common port "80")
+	
+	to check the service port of those pod if all the pods are assigned to same service Ip
+ 
+ 1) create a new pod to send request to service 
+ 
+  # kubectl run -it frontend --image ubuntu
+  
+ 2) get inside the pod to send a request
+ 
+ # curl 10.72.14.44:80  (note the port is 80 with cluster IP) if curl not found instll
+                        (# apt-get update && apt-get install curl -y)
+Output: this v1 pod myrs-956vtm
+
+3) this are to reach the pods with in the cluster
+ 
+############################## 
+
 NODEPORT:
+#######
+
+apiVersion: v1
+kind: Service
+metadata:
+ name: tomy-service
+spec:
+ type: NodePort
+ ports:
+  - targetPort: 80
+    port: 80
+    nodePort: 30008
+ selector:
+   type: kubeserve
+   
+   
 
 Create a jenkins pod definition file
 	# vim pod-definition3.yml
@@ -303,9 +408,11 @@ go to browser with an ip:30008
 
 ************************************************************
 
-Service Object: LoadBalancer
+LoadBalancer:
+########## *******************************************************
+This is possible only if the cluster or K8 is on private cloud server
+*****************************************************************
 
-*************************************************
 
 Create a new deployment definition file for nginx pod
 
@@ -367,12 +474,21 @@ spec:
   - port: 80
     targetPort: 80
  selector:
-  type: proxyserver
+  type: proxyserver (deployed meta name)
 
 
 	# kubectl create -f myservice2.yml
 
 	# kubectl get all
+
+*********************************************	
+NAME                      TYPE           CLUSTER-IP    EXTERNAL-IP    PORT(S)        AGE
+service/kubernetes        ClusterIP      10.72.0.1     <none>         443/TCP        70m
+service/nginx-myservice   LoadBalancer   10.72.8.254   35.226.96.70   80:31802/TCP   4m15s
+
+as you can see under loadBalancer External Ip is created, use only external IP into browser to access the service and use only external IP from cluster IP to access from diff pod, node or cluster to access the same.
+
+******************************************
 
 // you will see a service with name as service/nginx-myservice
 and external ip address as pending
