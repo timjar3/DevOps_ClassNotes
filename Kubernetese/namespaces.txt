@@ -1,0 +1,63 @@
+******** why namespaces *********
+
+kubectl delete pods --all
+or 
+kubectl delete all --all 
+
+this kind of commands can delete all the services and pods from all users
+
+therfore we need a partition with in a k8 cluster which will have respective user control on the same cluster.
+
+######## to create namespace profile:
+
+>> kubectl create ns rajm
+
+
+>> kubectl run pod1 --image nginx -n rajm
+
+
+
+to query the pods from respective user
+
+>> kubectl get pods -n rajm
+
+
+
+to delete the user defined pods
+
+>> kubectl delete pods --all -n rajm
+
+
+to add namespaces in deployment or manifest files:
+
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  namespace: rajm                **********    you add the key namespace and the user name
+  labels:
+    app: nginx
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.14.2
+        ports:
+        - containerPort: 80 
+        
+        
+  >> kubectl describe pod podname -n rajm
+  
+  >> kubectl gett all pod podname -n rajm 
+  
+  >> kubectl delete pod --all -n rajm
+
