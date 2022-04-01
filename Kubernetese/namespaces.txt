@@ -60,4 +60,6 @@ spec:
   >> kubectl gett all pod podname -n rajm 
   
   >> kubectl delete pod --all -n rajm
+  
+  >> kubectl delete deployment nginx-deployment -n rajm
 
