@@ -1,0 +1,124 @@
+there should be pool of volumes available(Internal + external) , like 
+
+internal vol and external vol
+
+internal = created on slave node
+external = created external vendored cloud storage like blob storage, NFS, file storage etc.
+
+* * * * For internal the object file will have readWriteonce and the path is user defined*****
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+ name: block-pv
+spec:
+ storageClassName: manual
+ capacity: 
+  storage: 1Gi
+ accessModes:
+  - ReadWriteOnce
+ hostPath:
+  path: /tmp/data
+  
+
+* * * * * For  external the object file will have readWritemany and the path would be server IP* * * * 
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+ name: block-pv
+spec:
+ storageClassName: manual
+ capacity: 
+  storage: 1T
+ accessModes:
+  - ReadWriteMany
+ nfs:
+  path: /fileshare1
+  server: 10.101.37.82
+  
+*************************
+
+three steps to creating PVs Persistent volumes:
+
+1. Creating PV's      =      create yml files 
+2. Claiming the PV's  =      create yml files 
+3. assigning the claim to a Pod = create yml file
+
+
+
+1.  Internal Volume : Create PV
+
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+ name: block-pv
+spec:
+ storageClassName: manual
+ capacity: 
+  storage: 1Gi
+ accessModes:
+  - ReadWriteOnce
+ hostPath:
+  path: /tmp/data
+     
+     >> kubectl create -f pvol.yml
+     
+     Validate:  >> kubectl get pv
+     
+   Output >> 
+   NAME        CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS      CLAIM   STORAGECLASS   REASON   AGE
+   block-pv    1Gi        RWO            Retain           Available           manual                  6m19s
+   
+   
+  
+  
+ 2.  Claim the PV :
+ 
+ 
+ apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+ name: pvolc2
+spec:
+ storageClassName: manual
+ accessModes:
+  - ReadWriteOnce
+ resources:
+  requests:
+   storage: 0.5Gi
+   
+ >> kubectl apply -f pvol.yml       (just edit d same file and apply)
+     
+     Validate:  >> kubectl get pv
+     
+   Output >>                                            ******
+  AME        CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS   CLAIM            STORAGECLASS   REASON   AGE
+  block-pv    1Gi        RWO            Retain           Bound    default/pvolc1   manual                  9m46s
+                                                        *******
+                                                     
+  as you can see in the output the status get boud and now the claim is created.
+  
+  
+ >> kubectl get pvc            (to check the claim approved or pending)
+ 
+        ********
+NAME     STATUS    VOLUME      CAPACITY   ACCESS MODES   STORAGECLASS   AGE
+pvolc    Bound     block-pv1   1536Mi     RWO            manual         4m31s
+pvolc1   Bound     block-pv    1Gi        RWO            manual         3m26s
+pvolc2   Pending                                         manual         80s
+       ***********
+you can check any pending PV claims is pending or approved 
+
+
+  
+
+  
+  
+  
+  
+  
+  
+  
+
