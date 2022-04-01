@@ -1,0 +1,40 @@
+How to write a playbook
+
+- host: webserver
+
+if we want to beacome a different user to execute our task:
+
+ become: true
+ become_user: root
+
+
+To execute multiple tasks in the playbook:
+
+tasks:
+- name: 
+  module_name: par1=value par2=val
+
+if we want a module to executed again and again for certain item_values
+
+loop
+
+if we want to pass value to parameter using a variable, how do you define a varibale in ansible playbook
+
+ {{varaible_name}}
+
+where do you define the variable
+
+vars:
+if we want to pass value to a variable at runtime ie: while executing the playbook
+
+# ansible-playbook playbook_name --extra-vars "value=item"
+
+
+to create auto directoryies in roles folder
+
+# cd roles/
+
+# sudo ansible-galaxy init role_name (give as desired role dir name)
+
+
+
