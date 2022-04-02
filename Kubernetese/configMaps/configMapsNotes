@@ -11,6 +11,8 @@ app.mem=2048m
 app.properties=dev.env.url
 :wq!
 
+we use configMap command(yml file) to store environment varibale and configuation file in k8.
+
 # kubectl create configmap dev-config1 --from-file=dev.properties
 # kubectl get configmap
 # kubectl get configmap dev-config1 -o yaml
