@@ -75,3 +75,10 @@ spec:
  # cd /etc/config
  
  you will find the dev.properties file and configurations
+ 
+ 
+ to edit the config map always use this command.
+ 
+ >> kubectl edit configmap config1 -o yaml
+ 
+ 
