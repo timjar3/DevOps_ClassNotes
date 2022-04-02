@@ -40,6 +40,35 @@ spec:
  
  :wq!
  
+ replicaset
+ 
+ ---
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: myrsconfig
+spec:
+  replicas: 3
+  selector:
+   matchLabels:
+    type: webserver
+  template:
+   metadata:
+    name: mypodconfig
+    labels:
+     type: webserver
+  spec:
+   containers:
+    - image: nginx
+      name: c1
+      volumeMounts:
+       - name: config-volume
+         mountPath: /etc/config
+  volumes:
+   - name: config-volume
+     configMap:
+     name: config1
+ 
  # kubectl apply -f pod-configmap.yml
  # kubectl exec -it pod-configmap bash
  # cd /etc/config
