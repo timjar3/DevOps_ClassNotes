@@ -75,6 +75,7 @@ here  http://localhost:3000/ or your private IP+portnumber
 
 just givee admin admin for access.
 
+****note this is not open source and is free for only few days ********
 
 go to the dashboard:
 
@@ -88,6 +89,102 @@ Scroll and to Save and test:
 
 Scroll to dashboard creating and check from the grafan website for free dashboards:
 copy past the ID or the name to import and check the metrics:
+
+
+we can add query like Sum(pods...as.da.s.d.ad) by adding panels and more
+
+
+but noramlly we use the readily availbe dashboards which can be imported:
+>> click +
+
+>> Import to get dashboards
+
+one of the comman dashboards used and their ID  :   6417 & 1000  press import with Promotheus source.
+
+
+>> kubectl top nodes
+>> kubectl top pods
+
+you can verify this with the dashboards to masternode commands.
+
+***************************************************
+
+using K8 inbuilt dashboard k8 GUI:
+
+using the insecure way wihout any RBAC (role based access or configuration). 
+
+https://github.com/timjar3/DevOps_ClassNotes/blob/master/Kubernetese/dashboard-insecure.yml
+
+
+
+Inside the cluster using the master node:
+
+>> kubectl create -f https://github.com/timjar3/DevOps_ClassNotes/blob/master/Kubernetese/dashboard-insecure.yml
+
+if you get error clone the repo to local and CD to K8 dir and run the yml file.
+
+
+
+
+you can acces the dashboard from the new k8 dashboard node port:
+
+>> kubectl get all
+
+
+>>Output 
+
+
+
+g309mugetsu@cloudshell:~/DevOps_ClassNotes/Kubernetese (dockerorc)$ k get all
+NAME                                             READY   STATUS    RESTARTS   AGE
+pod/dashboard-metrics-scraper-778b77d469-647nt   1/1     Running   0          107s
+pod/kubernetes-dashboard-654b7f5d46-d29h5        1/1     Running   0          107s
+
+NAME                                TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)        AGE
+service/dashboard-metrics-scraper   ClusterIP   10.72.15.242   <none>        8000/TCP       108s
+service/kubernetes                  ClusterIP   10.72.0.1      <none>        443/TCP        3h57m
+service/kubernetes-dashboard        NodePort    10.72.15.144   <none>        80:32488/TCP   109s     ********************* %%%%%%%%%%%%
+                                    ************************
+                                    %%%%%%%%%%%%%%%%%%%%%%%
+NAME                                        READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/dashboard-metrics-scraper   1/1     1            1           107s
+deployment.apps/kubernetes-dashboard        1/1     1            1           108s
+
+NAME                                                   DESIRED   CURRENT   READY   AGE
+replicaset.apps/dashboard-metrics-scraper-778b77d469   1         1         1       108s
+replicaset.apps/kubernetes-dashboard-654b7f5d46        1         1         1       108s
+
+
+
+>> use any of the nodes external IP with the port number of the K8 dashboard service from the above
+
+Eg: 
+http://34.123.117.158:32488/
+
+
+once its runnin
+
+Use Skip:
+
+
+Use Cases:
+
+1. you can share this URL with permission to anu stakeholder of deployment.
+
+2. you can explore all kinds of feature and current status of the pods
+
+3. you can also run yaml and creat yaml files using the " + " icon in the top right corner
+
+
+***********
+
+
+
+
+
+
+
+
 
 
 
