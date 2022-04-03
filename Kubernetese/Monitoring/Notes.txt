@@ -1,0 +1,101 @@
+Clone the repository using git clone:
+
+>> git clone https://github.com/timjar3/DevOps_ClassNotes.git
+
+>> cd standard/
+
+Install the metric server, which can be found in the k8 doc site.
+
+>> kubectl create -f . ( runs all the yaml files in that directory )
+
+it collects all the metrics and logs.
+
+********* time to install Prometheus ********************
+#### note:
+1. We can install Promtetheus in desktop or even in windows.
+2. the above promethus.yml file will be installed inside the docker to install inside form of container or pod.
+3. Docker site has respective images for all monitoring, prometheus, grafana, Nagios, Datadog etc.
+4. K8 has their own exclusive Prometheus and grafana yml file which could be used (prom/prometheus), ( they are products of google )
+
+Go through the promtheus.yml file.....(important)
+
+It has its own namespace called monitoring.
+
+kubectl get all -n monitoring
+
+>>output
+
+g309mugetsu@cloudshell:~/DevOps_ClassNotes/Kubernetese/Monitoring (dockerorc)$ k get all -n monitoring
+
+NAME                                         READY   STATUS    RESTARTS   AGE
+pod/prometheus-deployment-58f6fb464b-cr4xf   1/1     Running   0          4m37s
+
+NAME                         TYPE       CLUSTER-IP   EXTERNAL-IP   PORT(S)          AGE
+service/prometheus-service   NodePort   10.72.8.69   <none>        8080:30423/TCP   4m35s
+
+NAME                                    READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/prometheus-deployment   1/1     1            1           4m37s
+
+NAME                                               DESIRED   CURRENT   READY   AGE
+replicaset.apps/prometheus-deployment-58f6fb464b   1         1         1       4m37s
+
+*******note all running********* : Pod, Services, deployment, replicaset as per yml file.
+
+
+note the port nuber on the pod and find any of the public IP of the nodes in cluster and check if the port is open. 
+
+on the browser:
+
+to find the public IP:
+
+two ways: 
+1. >> kubectl get nodes -o wide
+ check the external IP of any of the nodes
+
+2. navigate google instance check any of then nodes and their respective IPs.
+
+
+***************** Prometheus is Data collector, it is a Query tool to fetch logs and info about K8 clusters *********************
+
+Grafana is a dashboard creator which had good garphs and other metric indicators to showcase which fetched data from Prometheus
+
+############  Grafana #################
+
+you can run grafana on any machine:
+
+here we are running on my localhost machine which is not connected to the cluster in anyway.
+
+
+>> docker run -d --name grafana -p 3000:3000 grafana/grafana
+
+access the app using external Ip address and port number 3000
+
+here  http://localhost:3000/ or your private IP+portnumber
+
+
+just givee admin admin for access.
+
+
+go to the dashboard:
+
+under > setting > source > prometheus : Ip Server > add the external IP of the promethus server plus the port number
+
+Eg:  http://34.123.117.158:30423/
+
+
+Scroll and to Save and test:
+
+
+Scroll to dashboard creating and check from the grafan website for free dashboards:
+copy past the ID or the name to import and check the metrics:
+
+
+
+
+
+
+
+
+
+
+
