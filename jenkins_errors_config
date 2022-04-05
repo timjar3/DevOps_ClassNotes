@@ -1,0 +1,27 @@
+---------This is Git and JAVA error:-------------------
+
+Started by user admin
+java.io.IOException: error=2, No such file or directory
+	at java.lang.UNIXProcess.forkAndExec(Native Method)
+	at java.lang.UNIXProcess.<init>(UNIXProcess.java:247)
+	at java.lang.ProcessImpl.start(ProcessImpl.java:134)
+	at java.lang.ProcessBuilder.start(ProcessBuilder.java:1029)
+Caused: java.io.IOException: Cannot run program "" (in directory "/var/lib/jenkins/caches/git-3534a896def2bd16162de6de8d15e598"): error=2, No such file or directory
+
+
+unable to find GIt and JAVA home: 
+
+SOlution: @@ centOS 7
+
+Make sure the GIt and java is installed and add the path to global configuration
+
+Eg: Git path:   /usr/bin/git
+    Java path: /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.322.b06-1.el7_9.x86_64/ 
+       Name: JAVA_HOME
+       
+       Add: nano .bash_profile  JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.322.b06-1.el7_9.x86_64/
+       
+install uninstal JAVA: Link: https://phoenixnap.com/kb/install-java-on-centos
+
+*************************************************************************************************************
+
